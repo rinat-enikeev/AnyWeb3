@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct KeystoreView: View {
-    @StateObject var keystores = KeystoresObject()
+    @StateObject var keystore = KeystoreObject()
 
     var body: some View {
         List {
-            ForEach(keystores.addresses) { address in
+            ForEach(keystore.addresses) { address in
                 Text(address.address)
             }
         }
@@ -21,6 +21,6 @@ struct KeystoreView: View {
 
 struct KeystoresView_Previews: PreviewProvider {
     static var previews: some View {
-        KeystoreView(keystores: KeystoresObject())
+        KeystoreView(keystore: KeystoreObject())
     }
 }

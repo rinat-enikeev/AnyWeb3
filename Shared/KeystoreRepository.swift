@@ -26,16 +26,27 @@ final actor KeystoreRepository {
             return
         }
         keystore.value = debugKeystore
-        keystore.value?.addresses
-        try debugKeystore.createNewCustomChildAccount(password: "", path: HDNode.defaultPath + "/1")
-        try debugKeystore.createNewCustomChildAccount(password: "", path: HDNode.defaultPath + "/2")
-        try debugKeystore.createNewCustomChildAccount(password: "", path: HDNode.defaultPath + "/3")
-        try debugKeystore.createNewCustomChildAccount(password: "", path: HDNode.defaultPath + "/4")
-        try debugKeystore.createNewCustomChildAccount(password: "", path: HDNode.defaultPath + "/5")
-        try debugKeystore.createNewCustomChildAccount(password: "", path: HDNode.defaultPath + "/6")
-        try debugKeystore.createNewCustomChildAccount(password: "", path: HDNode.defaultPath + "/7")
-        try debugKeystore.createNewCustomChildAccount(password: "", path: HDNode.defaultPath + "/8")
-        try debugKeystore.createNewCustomChildAccount(password: "", path: HDNode.defaultPath + "/9")
+        guard let address = debugKeystore.addresses?.first else {
+            assertionFailure()
+            return
+        }
+        addresses.value.append(address)
+        for i in 1...9 {
+            guard let address = try generateAddress(debugKeystore: debugKeystore, i) else {
+                assertionFailure()
+                return
+            }
+            addresses.value.append(address)
+        }
+    }
+    
+    private func generateAddress(debugKeystore: BIP32Keystore, _ index: Int) throws -> EthereumAddress? {
+        try debugKeystore.createNewCustomChildAccount(password: "", path: HDNode.defaultPath + "/\(index)")
+        guard debugKeystore.addresses?.count ?? 0 > index else {
+            assertionFailure()
+            return nil
+        }
+        return debugKeystore.addresses?[index]
     }
     #endif
 }
