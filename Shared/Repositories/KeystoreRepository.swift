@@ -10,17 +10,18 @@ import Combine
 import Foundation
 import web3swift
 
-final actor KeystoreRepository {
+actor KeystoreRepository {
     nonisolated let addresses = CurrentValueSubject<[EthereumAddress], Never>([])
     nonisolated let keystore = CurrentValueSubject<AbstractKeystore?, Never>(nil)
-    
+
     #if DEBUG
-    func loadDevelopmentAccount() throws {
+    func loadDebug() throws {
         guard let mnemonicsURL = Bundle.main.url(forResource: "mnemonics", withExtension: "") else {
             assertionFailure()
             return
         }
         let mnemonics = try String(contentsOf: mnemonicsURL)
+        guard !Task.isCancelled else { return }
         guard let debugKeystore = try BIP32Keystore(mnemonics: mnemonics, password: "", language: .spanish) else {
             assertionFailure()
             return
@@ -32,6 +33,7 @@ final actor KeystoreRepository {
         }
         addresses.value.append(address)
         for i in 1...9 {
+            guard !Task.isCancelled else { return }
             guard let address = try generateAddress(debugKeystore: debugKeystore, i) else {
                 assertionFailure()
                 return

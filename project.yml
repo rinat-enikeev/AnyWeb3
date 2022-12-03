@@ -36,6 +36,11 @@ targets:
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
         UILaunchStoryboardName: LaunchScreen
+        NSAppTransportSecurity:
+          NSAllowsArbitraryLoads: true
+          NSExceptionDomains: 
+            localhost: 
+              NSExceptionAllowsInsecureHTTPLoads: true
     settings:
       base:
         TARGETED_DEVICE_FAMILY: 1
