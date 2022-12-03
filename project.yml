@@ -1,15 +1,17 @@
 APP_NAME: &APP_NAME AnyWeb3
+DEVELOPMENT_TEAM: &DEVELOPMENT_TEAM 5V5EUT3ZXJ
+BUNDLE_ID_PREFIX: &BUNDLE_ID_PREFIX eu.enikeev
 
 settings:
   base:
     CURRENT_PROJECT_VERSION: 1
     MARKETING_VERSION: "0.1"
-    DEVELOPMENT_TEAM: 5V5EUT3ZXJ
+    DEVELOPMENT_TEAM: *DEVELOPMENT_TEAM
 
 name: *APP_NAME
 
 options:
-  bundleIdPrefix: eu.enikeev
+  bundleIdPrefix: *BUNDLE_ID_PREFIX
   developmentLanguage: en
   deploymentTarget:
     iOS: 16.0
@@ -33,5 +35,4 @@ targets:
       base:
         TARGETED_DEVICE_FAMILY: 1
         SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: false
-        PRODUCT_BUNDLE_IDENTIFIER: eu.enikeev.ios
         CODE_SIGN_ENTITLEMENTS: iOS/iOS.entitlements
