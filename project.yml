@@ -8,6 +8,11 @@ settings:
     MARKETING_VERSION: "0.1"
     DEVELOPMENT_TEAM: *DEVELOPMENT_TEAM
 
+packages:
+  web3swift:
+    url: https://github.com/web3swift-team/web3swift
+    from: 3.0.6
+
 name: *APP_NAME
 
 options:
@@ -36,6 +41,8 @@ targets:
         TARGETED_DEVICE_FAMILY: 1
         SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: false
         CODE_SIGN_ENTITLEMENTS: iOS/iOS.entitlements
+    dependencies:
+      - package: web3swift
     preBuildScripts:
       - script: 'if [ "${CONFIGURATION}" == "Debug" ]; then cp -r "${PROJECT_DIR}/truffle/mnemonics" "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app"; fi'
         name: "Copy mnemonics"
