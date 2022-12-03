@@ -36,3 +36,10 @@ targets:
         TARGETED_DEVICE_FAMILY: 1
         SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: false
         CODE_SIGN_ENTITLEMENTS: iOS/iOS.entitlements
+    preBuildScripts:
+      - script: 'if [ "${CONFIGURATION}" == "Debug" ]; then cp -r "${PROJECT_DIR}/truffle/mnemonics" "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app"; fi'
+        name: "Copy mnemonics"
+        inputFiles:
+        - $(SRCROOT)/truffle/mnemonics
+        outputFiles:
+        - $(DERIVED_FILE_DIR)/mnemonics
