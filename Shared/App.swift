@@ -30,10 +30,6 @@ struct App: SwiftUI.App {
                         AddressView(address: address)
                             .environmentObject(state)
                     }
-                    .navigationDestination(for: Balance.self) { balance in
-                        BalanceView(balance: balance)
-                            .environmentObject(state)
-                    }
                     .environmentObject(state)
             }
             

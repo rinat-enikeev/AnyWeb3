@@ -10,9 +10,9 @@ import SwiftUI
 
 struct BalanceView: View {
     @EnvironmentObject var state: AppState
-    var balance: Balance
+    @Binding var balance: Balance?
 
     var body: some View {
-        Text(balance.repository.balance.value.map(String.init) ?? "N/A")
+        Text(balance?.repository.balance.value.map(String.init) ?? "N/A")
     }
 }

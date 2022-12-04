@@ -13,14 +13,11 @@ struct NetworkView: View {
 
     var body: some View {
         VStack {
-            AsyncButton("Connect") {
-                await state.establishConnection(network)
-            }
-            .buttonStyle(.bordered)
-            .padding()
-            NavigationLink(value: state.connection) {
-                Text("Proceed")
-            }
+            KeystoreView()
+        }
+        .navigationTitle(network.name)
+        .task(priority: .userInitiated) {
+            await state.establishConnection(network)
         }
     }
 }

@@ -13,14 +13,9 @@ struct AddressView: View {
     
     var body: some View {
         VStack {
-            AsyncButton("Balance") {
-                await state.startPollingBalance(address: address)
-            }
-            .buttonStyle(.bordered)
-            .padding()
-            NavigationLink(value: state.balance) {
-                Text("Proceed")
-            }
+            BalanceView(balance: $state.balance)
+        }.task {
+            await state.startPollingBalance(address: address)
         }
     }
 }
