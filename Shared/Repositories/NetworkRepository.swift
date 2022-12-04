@@ -11,11 +11,13 @@ import Foundation
 import web3swift
 
 final actor NetworkRepository: ObservableObject {
+    let network: Network
     let web3: Web3
     private let rpcUrl: URL
     private let provider: Web3Provider
     
     init(_ network: Network) async {
+        self.network = network
         self.rpcUrl = network.rpcUrl
         self.provider = await Web3HttpProvider(
             rpcUrl,

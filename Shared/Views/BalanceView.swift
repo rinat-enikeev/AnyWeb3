@@ -5,6 +5,7 @@
 //  Created by Rinat Enikeev on 03.12.2022.
 //
 
+import BigInt
 import Core
 import SwiftUI
 
@@ -13,6 +14,15 @@ struct BalanceView: View {
     @Binding var balance: Balance?
 
     var body: some View {
-        Text(balance?.repository.balance.value.map(String.init) ?? "N/A")
+        if let balance, let value = balance.repository.balance.value {
+            Text(
+                value,
+                format: .crypto(
+                    decimals: balance.repository.connection.repository.network.decimals
+                )
+            )
+        } else {
+            ProgressView()
+        }
     }
 }

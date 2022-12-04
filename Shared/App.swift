@@ -64,6 +64,9 @@ class AppState: ObservableObject {
             .receive(on: RunLoop.main)
             .map { $0.map { Address(address: $0) } }
             .assign(to: &$addresses)
+        #if DEBUG
+        path.append(Network.development)
+        #endif
     }
     
     func startPollingBalance(address: Address) async {
