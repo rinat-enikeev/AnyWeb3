@@ -1,5 +1,5 @@
 //
-//  KeystoreRepository.swift
+//  KeystoreActor.swift
 //  AnyWeb3
 //
 //  Created by Rinat Enikeev on 03.12.2022.
@@ -10,30 +10,33 @@ import Combine
 import Foundation
 import web3swift
 
-actor KeystoreRepository {
+actor KeystoreActor {
+    let keystore: Keystore
     nonisolated let addresses = CurrentValueSubject<[EthereumAddress], Never>([])
-    nonisolated let keystore = CurrentValueSubject<AbstractKeystore?, Never>(nil)
 
-    #if DEBUG
-    func loadDebug() throws {
-        guard let mnemonicsURL = Bundle.main.url(forResource: "mnemonics", withExtension: "") else {
+    private let password: String
+    private let language: BIP39Language
+    init(
+        keystore: Keystore,
+        password: String,
+        language: BIP39Language
+    ) {
+        self.keystore = keystore
+        self.password = password
+        self.language = language
+    }
+    
+    func load() throws {
+        guard let debugKeystore = try BIP32Keystore(mnemonics: keystore.mnemonics, password: password, language: language) else {
             assertionFailure()
             return
         }
-        let mnemonics = try String(contentsOf: mnemonicsURL)
-        guard !Task.isCancelled else { return }
-        guard let debugKeystore = try BIP32Keystore(mnemonics: mnemonics, password: "", language: .spanish) else {
-            assertionFailure()
-            return
-        }
-        keystore.value = debugKeystore
         guard let address = debugKeystore.addresses?.first else {
             assertionFailure()
             return
         }
         addresses.value.append(address)
         for i in 1...9 {
-            guard !Task.isCancelled else { return }
             guard let address = try generateAddress(debugKeystore: debugKeystore, i) else {
                 assertionFailure()
                 return
@@ -50,5 +53,4 @@ actor KeystoreRepository {
         }
         return debugKeystore.addresses?[index]
     }
-    #endif
 }

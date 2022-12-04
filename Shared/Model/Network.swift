@@ -16,6 +16,7 @@ struct Network: Hashable, Identifiable {
 }
 
 extension Network {
+    #if DEBUG
     static var development: Self {
         Network(
             name: "Development",
@@ -24,6 +25,7 @@ extension Network {
             chainId: 100
         )
     }
+    #endif
     
     static var ethereum: Self {
         Network(

@@ -5,9 +5,6 @@
 //  Created by Rinat Enikeev on 03.12.2022.
 //
 
-import BigInt
-import Core
-import Combine
 import SwiftUI
 
 @main
@@ -19,11 +16,11 @@ struct App: SwiftUI.App {
             NavigationStack(path: $state.path) {
                 NetworksView()
                     .navigationDestination(for: Network.self) { network in
-                        NetworkView(network: network)
+                        KeystoresView(keystores: $state.keystores, network: network)
                             .environmentObject(state)
                     }
-                    .navigationDestination(for: Connection.self) { connection in
-                        KeystoreView()
+                    .navigationDestination(for: Keystore.self) { keystore in
+                        KeystoreView(addresses: $state.addresses, keystore: keystore)
                             .environmentObject(state)
                     }
                     .navigationDestination(for: Address.self) { address in
@@ -32,57 +29,13 @@ struct App: SwiftUI.App {
                     }
                     .environmentObject(state)
             }
-            
-            .task(priority: .medium) {
+            .task {
                 do {
-                    #if DEBUG
-                    try await state.keystoreRepository.loadDebug()
-                    #endif
+                    try await state.loadKeystores()
                 } catch {
                     print(error.localizedDescription)
                 }
             }
-        }
-    }
-}
-
-class AppState: ObservableObject {
-    @Published var path = NavigationPath()
-    @Published var address: Address?
-    @Published var balance: Balance?
-    @Published var network: Network?
-    @Published var connection: Connection?
-    @Published var addresses = [Address]()
-
-    let keystoreRepository = KeystoreRepository()
-    var balanceRepository: BalanceRepository?
-    
-    private var cancellables = Set<AnyCancellable>()
-    
-    init() {
-        keystoreRepository.addresses
-            .receive(on: RunLoop.main)
-            .map { $0.map { Address(address: $0) } }
-            .assign(to: &$addresses)
-        #if DEBUG
-        path.append(Network.development)
-        #endif
-    }
-    
-    func startPollingBalance(address: Address) {
-        guard let connection else {
-            assertionFailure()
-            return
-        }
-        let balanceRepository = BalanceRepository(address: address.address, connection: connection)
-        balanceRepository.startPolling()
-        balance = Balance(balanceRepository: balanceRepository)
-    }
-    
-    func establishConnection(_ network: Network) async {
-        let networkRepository = await NetworkRepository(network)
-        await MainActor.run {
-            connection = Connection(networkRepository: networkRepository)
         }
     }
 }

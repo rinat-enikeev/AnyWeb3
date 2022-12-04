@@ -1,5 +1,5 @@
 //
-//  NetworkRepository.swift
+//  Web3Actor.swift
 //  AnyWeb3
 //
 //  Created by Rinat Enikeev on 03.12.2022.
@@ -10,16 +10,15 @@ import Core
 import Foundation
 import web3swift
 
-final actor NetworkRepository: ObservableObject {
-    let network: Network
+final actor Web3Actor {
     let web3: Web3
+    let network: Network
     private let rpcUrl: URL
-    private let provider: Web3Provider
     
     init(_ network: Network) async {
         self.network = network
         self.rpcUrl = network.rpcUrl
-        self.provider = await Web3HttpProvider(
+        let provider = await Web3HttpProvider(
             rpcUrl,
             network: .Custom(networkID: BigUInt(network.chainId))
         )!

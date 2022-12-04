@@ -10,13 +10,27 @@ import SwiftUI
 
 struct KeystoreView: View {
     @EnvironmentObject var state: AppState
-
+    @Binding var addresses: [Address]?
+    let keystore: Keystore
+    
     var body: some View {
         VStack {
-            List(state.addresses) { address in
-                NavigationLink(value: address) {
-                    Text(address.address.address)
+            if let addresses {
+                List(addresses) { address in
+                    NavigationLink(value: address) {
+                        Text(address.address.address)
+                    }
                 }
+            } else {
+                ProgressView()
+            }
+        }
+        .navigationTitle(keystore.name)
+        .task(priority: .medium) {
+            do {
+                try await state.loadAddresses(keystore: keystore)
+            } catch {
+                print(error.localizedDescription)
             }
         }
     }

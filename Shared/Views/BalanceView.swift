@@ -14,12 +14,10 @@ struct BalanceView: View {
     @Binding var balance: Balance?
 
     var body: some View {
-        if let balance, let value = balance.repository.balance.value {
+        if let value = balance?.value {
             Text(
                 value,
-                format: .crypto(
-                    decimals: balance.repository.connection.repository.network.decimals
-                )
+                format: .crypto()
             )
         } else {
             ProgressView()
