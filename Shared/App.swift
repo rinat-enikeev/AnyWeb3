@@ -69,20 +69,14 @@ class AppState: ObservableObject {
         #endif
     }
     
-    func startPollingBalance(address: Address) async {
+    func startPollingBalance(address: Address) {
         guard let connection else {
             assertionFailure()
             return
         }
         let balanceRepository = BalanceRepository(address: address.address, connection: connection)
-        do {
-            try await balanceRepository.startPolling()
-        } catch {
-            print(error.localizedDescription)
-        }
-        await MainActor.run {
-            balance = Balance(balanceRepository: balanceRepository)
-        }
+        balanceRepository.startPolling()
+        balance = Balance(balanceRepository: balanceRepository)
     }
     
     func establishConnection(_ network: Network) async {

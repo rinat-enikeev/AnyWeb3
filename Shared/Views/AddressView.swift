@@ -15,7 +15,7 @@ struct AddressView: View {
         VStack {
             BalanceView(balance: $state.balance)
         }.task {
-            await state.startPollingBalance(address: address)
+            state.startPollingBalance(address: address)
         }
     }
 }

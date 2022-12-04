@@ -10,10 +10,11 @@ import Core
 import Combine
 import Foundation
 
-final actor BalanceRepository {
-    nonisolated let balance = CurrentValueSubject<BigUInt?, Never>(nil)
+final class BalanceRepository {
+    let balance = CurrentValueSubject<BigUInt?, Never>(nil)
     let address: EthereumAddress
     let connection: Connection
+    private var cancellable: Cancellable?
     
     init(
         address: EthereumAddress,
@@ -23,7 +24,15 @@ final actor BalanceRepository {
         self.connection = connection
     }
     
-    func startPolling() async throws {
-        balance.value = try await connection.repository.web3.eth.getBalance(for: address)
+    func startPolling() {
+        cancellable = Timer.publish(every: 6, on: .main, in: .default)
+            .autoconnect()
+            .prepend(Date())
+            .await { _ in
+                try await self.connection.repository.web3.eth.getBalance(for: self.address)
+            }
+            .assign(to: \.value, on: balance)
     }
 }
+
+
