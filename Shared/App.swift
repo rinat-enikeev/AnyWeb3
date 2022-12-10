@@ -22,14 +22,6 @@ struct App: SwiftUI.App {
                         network: $state.network,
                         transaction: $state.transaction
                     )
-                    .navigationDestination(for: Transaction.self) { transaction in
-                        TransactionView(
-                            transaction: $state.transaction,
-                            network: $state.network
-                        )
-                        .environmentObject(state)
-                    }
-                    .environmentObject(state)
                 }
             }
         }
