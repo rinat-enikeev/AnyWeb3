@@ -44,3 +44,23 @@ struct TransactionView: View {
         }.padding()
     }
 }
+
+#if DEBUG
+struct TransactionView_Previews: PreviewProvider {
+    static var previews: some View {
+        TransactionView_PreviewContainer()
+    }
+}
+
+struct TransactionView_PreviewContainer : View {
+    @State var network: Network = .development
+    @State var transaction: Transaction = .zero
+
+     var body: some View {
+         TransactionView(
+            transaction: $transaction,
+            network: $network
+         )
+     }
+}
+#endif

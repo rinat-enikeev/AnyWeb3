@@ -60,9 +60,21 @@ final class BalanceModel: ObservableObject {
     }
 }
 
-//struct BalanceView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        BalanceView(address: .preview, network: .development)
-//    }
-//}
+#if DEBUG
+struct BalanceView_Previews: PreviewProvider {
+    static var previews: some View {
+        BalanceView_PreviewContainer()
+    }
+}
+
+struct BalanceView_PreviewContainer : View {
+    @State var address: Address = .zero
+    @State var network: Network = .development
+    @State var transaction: Transaction = .zero
+
+     var body: some View {
+         BalanceView(address: $address, network: $network)
+     }
+}
+#endif
 

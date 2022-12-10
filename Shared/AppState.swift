@@ -14,5 +14,5 @@ class AppState: ObservableObject {
     @Published var path = NavigationPath()
     @Published var network: Network = .development
     @Published var address: Address = .zero
-    @Published var transaction: Transaction = .preview
+    @Published var transaction: Transaction = .zero
 }

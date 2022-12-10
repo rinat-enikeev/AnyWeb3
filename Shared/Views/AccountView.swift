@@ -47,3 +47,19 @@ final class AccountModel: ObservableObject {
         try await actor.startLoading()
     }
 }
+
+#if DEBUG
+struct AccountView_Previews: PreviewProvider {
+    static var previews: some View {
+        AccountView_PreviewContainer()
+    }
+}
+
+struct AccountView_PreviewContainer : View {
+    @State var address: Address = .zero
+    
+    var body: some View {
+        AccountView(address: $address, account: .preview)
+    }
+}
+#endif

@@ -15,7 +15,7 @@ struct Transaction: Hashable {
 }
 
 extension Transaction {
-    static var preview: Self {
+    static var zero: Self {
         Transaction(from: .zero, to: .zero)
     }
 }

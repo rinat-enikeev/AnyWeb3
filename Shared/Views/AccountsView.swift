@@ -16,6 +16,14 @@ struct AccountsView: View {
                 Text(account.name)
             }
         }
-        .navigationTitle("Keystores")
+        .navigationTitle("Accounts")
     }
 }
+
+#if DEBUG
+struct AccountsView_Previews: PreviewProvider {
+    static var previews: some View {
+        AccountsView()
+    }
+}
+#endif

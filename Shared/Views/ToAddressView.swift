@@ -25,3 +25,21 @@ struct ToAddressView: View {
         .padding()
     }
 }
+
+#if DEBUG
+struct ToAddressView_Previews: PreviewProvider {
+    static var previews: some View {
+        ToAddressView_PreviewContainer()
+    }
+}
+
+struct ToAddressView_PreviewContainer : View {
+    @State var transaction: Transaction = .zero
+
+     var body: some View {
+         ToAddressView(
+            transaction: $transaction
+         )
+     }
+}
+#endif

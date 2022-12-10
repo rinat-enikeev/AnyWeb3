@@ -29,11 +29,3 @@ extension Address {
         Address(address: EthereumAddress.zero)
     }
 }
-
-#if DEBUG
-extension Address {
-    static var preview: Self {
-        Address(address: "0xBA3Ee8eC7c6d9d695D3148ddA0133387F652Fae1")!
-    }
-}
-#endif

@@ -60,10 +60,25 @@ struct AddressView: View {
     }
 }
 
+#if DEBUG
+struct AddressView_Previews: PreviewProvider {
+    static var previews: some View {
+        AddressView_PreviewContainer()
+    }
+}
 
-//struct AddressView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        AddressView(address: .preview, network: .development)
-//    }
-//}
+struct AddressView_PreviewContainer : View {
+    @State var address: Address = .zero
+    @State var network: Network = .development
+    @State var transaction: Transaction = .zero
+
+     var body: some View {
+         AddressView(
+             address: $address,
+             network: $network,
+             transaction: $transaction
+         )
+     }
+}
+#endif
 

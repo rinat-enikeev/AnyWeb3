@@ -24,9 +24,18 @@ struct NetworksView: View {
     }
 }
 
-//struct NetworksView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        NetworksView()
-//    }
-//}
+#if DEBUG
+struct NetworksView_Previews: PreviewProvider {
+    static var previews: some View {
+        NetworksView_PreviewContainer()
+    }
+}
 
+struct NetworksView_PreviewContainer : View {
+    @State var network: Network = .development
+    
+    var body: some View {
+        NetworksView(network: $network)
+    }
+}
+#endif
