@@ -14,12 +14,23 @@ struct AddressView: View {
 
     @State var isNetworksPresented = false
     @State var isKeystoresPresented = false
-
+    @State var isTransactionPresented = false
+    
     var body: some View {
         VStack {
             BalanceView(address: $address, network: $network)
             .padding()
-            ToAddressView(transaction: $transaction)
+            Button("Send") {
+                isTransactionPresented = true
+            }
+            .sheet(isPresented: $isTransactionPresented) {
+                TransactionView(
+                    transaction: $transaction,
+                    network: $network
+                )
+                .presentationDetents([.medium])
+            }
+            Spacer()
         }
         .onChange(of: address) { _ in
             transaction.from = address
@@ -38,6 +49,7 @@ struct AddressView: View {
                         Button("Close") {
                             isKeystoresPresented = false
                         }
+                        .padding()
                     }
                     .presentationDetents([.medium])
                 }
@@ -52,6 +64,7 @@ struct AddressView: View {
                         Button("Close") {
                             isNetworksPresented = false
                         }
+                        .padding()
                     }
                     .presentationDetents([.medium])
                 }

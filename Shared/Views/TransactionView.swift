@@ -14,6 +14,10 @@ struct TransactionView: View {
     @Binding var network: Network
     
     var body: some View {
+        let toBinding = Binding(
+            get: { transaction.to.address.address },
+            set: { transaction.to = Address(address: $0) ?? .zero }
+        )
         let valueBinding = Binding<String>(
             get: { transaction.value?.description ?? "0" },
             set: { transaction.value = BigUInt($0) }
@@ -25,7 +29,7 @@ struct TransactionView: View {
             }
             HStack {
                 Text("To: ")
-                Text(transaction.to, format: .shorten)
+                TextField("address", text: toBinding)
             }
             TextField("Value", text: valueBinding)
             Button("Confirm") {
