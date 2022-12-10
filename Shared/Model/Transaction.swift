@@ -13,3 +13,9 @@ struct Transaction: Hashable {
     var to: Address
     var value: BigUInt?
 }
+
+extension Transaction {
+    static var preview: Self {
+        Transaction(from: .zero, to: .zero)
+    }
+}

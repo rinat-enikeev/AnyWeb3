@@ -10,34 +10,26 @@ import SwiftUI
 @main
 struct App: SwiftUI.App {
     @StateObject var state = AppState()
-    
+
     var body: some Scene {
         WindowGroup {
-            NavigationStack(path: $state.path) {
-                NetworksView()
-                    .navigationDestination(for: Network.self) { network in
-                        KeystoresView(keystores: $state.keystores, network: network)
-                            .environmentObject(state)
-                    }
-                    .navigationDestination(for: Keystore.self) { keystore in
-                        KeystoreView(addresses: $state.addresses, keystore: keystore)
-                            .environmentObject(state)
-                    }
-                    .navigationDestination(for: Address.self) { address in
-                        AddressView(address: address)
-                            .environmentObject(state)
-                    }
+            VStack {
+                Text(state.network.name)
+                Text(state.address, format: .shorten)
+                NavigationStack(path: $state.path) {
+                    AddressView(
+                        address: $state.address,
+                        network: $state.network,
+                        transaction: $state.transaction
+                    )
                     .navigationDestination(for: Transaction.self) { transaction in
-                        TransactionView(transaction: transaction)
-                            .environmentObject(state)
+                        TransactionView(
+                            transaction: $state.transaction,
+                            network: $state.network
+                        )
+                        .environmentObject(state)
                     }
                     .environmentObject(state)
-            }
-            .task {
-                do {
-                    try await state.loadKeystores()
-                } catch {
-                    print(error.localizedDescription)
                 }
             }
         }

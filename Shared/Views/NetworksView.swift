@@ -8,19 +8,25 @@
 import SwiftUI
 
 struct NetworksView: View {
-    @EnvironmentObject var state: AppState
-    #if DEBUG
-    @State var networks: [Network] = [.development, .ethereum, .gnosis]
-    #else
-    @State var networks: [Network] = [.ethereum, .gnosis]
-    #endif
+    let networks: [Network] = [.development, .ethereum, .gnosis]
+    @Binding var network: Network
     
     var body: some View {
-        List(networks) { network in
-            NavigationLink(value: network) {
+        VStack {
+            let selection = Binding<Network?>(
+                get: { network },
+                set: { network = $0 ?? .development }
+            )
+            List(networks, id: \.self, selection: selection) { network in
                 Text(network.name)
             }
         }
-        .navigationTitle("Networks")
     }
 }
+
+//struct NetworksView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        NetworksView()
+//    }
+//}
+

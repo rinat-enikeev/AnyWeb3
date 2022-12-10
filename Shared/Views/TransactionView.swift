@@ -10,8 +10,8 @@ import Core
 import SwiftUI
 
 struct TransactionView: View {
-    @EnvironmentObject var state: AppState
-    @State var transaction: Transaction
+    @Binding var transaction: Transaction
+    @Binding var network: Network
     
     var body: some View {
         let valueBinding = Binding<String>(
@@ -21,17 +21,18 @@ struct TransactionView: View {
         VStack {
             HStack {
                 Text("From: ")
-                Text(transaction.from.address.address)
+                Text(transaction.from, format: .shorten)
             }
             HStack {
                 Text("To: ")
-                Text(transaction.to.address.address)
+                Text(transaction.to, format: .shorten)
             }
             TextField("Value", text: valueBinding)
             Button("Confirm") {
                 Task {
                     do {
-                        try await state.sendTransaction(transaction)
+                        let web3Actor = await Web3Actor(network)
+                        try await web3Actor.sendTranscation(transaction)
                     } catch {
                         if let web3Error = error as? Web3Error {
                             print(web3Error.errorDescription)

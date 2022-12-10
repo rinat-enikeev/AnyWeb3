@@ -8,18 +8,62 @@
 import SwiftUI
 
 struct AddressView: View {
-    let address: Address
-    @EnvironmentObject var state: AppState
-    
+    @Binding var address: Address
+    @Binding var network: Network
+    @Binding var transaction: Transaction
+
+    @State var isNetworksPresented = false
+    @State var isKeystoresPresented = false
+
     var body: some View {
         VStack {
-            BalanceView(balance: $state.balance)
-                .padding()
-            ToAddressView(from: address)
+            BalanceView(address: $address, network: $network)
+            .padding()
+            ToAddressView(transaction: $transaction)
         }
-        .navigationTitle(address.address.address)
-        .task {
-            await state.startPollingBalance(address: address)
+        .onChange(of: address) { _ in
+            transaction.from = address
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("Account") {
+                    isKeystoresPresented = true
+                }
+                .sheet(isPresented: $isKeystoresPresented) {
+                    NavigationStack {
+                        AccountsView()
+                            .navigationDestination(for: Account.self) { account in
+                                AccountView(address: $address, account: account)
+                            }
+                        Button("Close") {
+                            isKeystoresPresented = false
+                        }
+                    }
+                    .presentationDetents([.medium])
+                }
+            }
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button("Network") {
+                    isNetworksPresented = true
+                }
+                .sheet(isPresented: $isNetworksPresented) {
+                    VStack {
+                        NetworksView(network: $network)
+                        Button("Close") {
+                            isNetworksPresented = false
+                        }
+                    }
+                    .presentationDetents([.medium])
+                }
+            }
         }
     }
 }
+
+
+//struct AddressView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        AddressView(address: .preview, network: .development)
+//    }
+//}
+

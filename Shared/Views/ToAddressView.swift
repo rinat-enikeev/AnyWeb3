@@ -8,11 +8,7 @@
 import SwiftUI
 
 struct ToAddressView: View {
-    @State var transaction: Transaction
-    
-    init(from: Address) {
-        self.transaction = Transaction(from: from, to: .zero)
-    }
+    @Binding var transaction: Transaction
 
     var body: some View {
         let toBinding = Binding(
