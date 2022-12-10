@@ -73,4 +73,12 @@ class AppState: ObservableObject {
         guard web3Actor?.network != network else { return }
         web3Actor = await Web3Actor(network)
     }
+    
+    func sendTransaction(_ transaction: Transaction) async throws {
+        guard let web3Actor else {
+            assertionFailure()
+            return
+        }
+        try await web3Actor.sendTranscation(transaction)
+    }
 }

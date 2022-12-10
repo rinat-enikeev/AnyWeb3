@@ -16,3 +16,16 @@ struct Address: Hashable, Identifiable {
         self.address = address
     }
 }
+
+extension Address {
+    init?(address: String) {
+        guard let address = EthereumAddress(address) else { return nil }
+        self.init(address: address)
+    }
+}
+
+extension Address {
+    static var zero: Self {
+        Address(address: EthereumAddress.zero)
+    }
+}

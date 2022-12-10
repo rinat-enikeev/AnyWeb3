@@ -22,7 +22,7 @@ extension Network {
             name: "Development",
             decimals: 18,
             rpcUrl: URL(string: "http://127.0.0.1:8545")!,
-            chainId: 100
+            chainId: 1337
         )
     }
     #endif

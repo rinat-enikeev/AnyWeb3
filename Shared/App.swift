@@ -27,6 +27,10 @@ struct App: SwiftUI.App {
                         AddressView(address: address)
                             .environmentObject(state)
                     }
+                    .navigationDestination(for: Transaction.self) { transaction in
+                        TransactionView(transaction: transaction)
+                            .environmentObject(state)
+                    }
                     .environmentObject(state)
             }
             .task {

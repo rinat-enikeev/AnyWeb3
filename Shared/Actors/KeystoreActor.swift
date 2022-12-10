@@ -41,6 +41,7 @@ actor KeystoreActor {
                 assertionFailure()
                 return
             }
+            print(address.address)
             addresses.value.append(address)
         }
     }
