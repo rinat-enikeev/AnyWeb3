@@ -37,7 +37,7 @@ struct AccountView: View {
 
 final class AccountModel: ObservableObject {
     @Published var addresses = [Address]()
-    var account: Account = .preview
+    var account: Account = .demo
     
     func load() async throws {
         let actor = try AccountActor(account: account, password: "", language: .spanish)
@@ -59,7 +59,7 @@ struct AccountView_PreviewContainer : View {
     @State var address: Address = .zero
     
     var body: some View {
-        AccountView(address: $address, account: .preview)
+        AccountView(address: $address, account: .demo)
     }
 }
 #endif

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AccountsView: View {
-    @State var accounts: [Account] = [.preview]
+    @State var accounts: [Account] = [.demo]
     
     var body: some View {
         List(accounts) { account in

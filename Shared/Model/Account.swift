@@ -14,7 +14,7 @@ struct Account: Hashable, Identifiable {
 }
 
 extension Account {
-    static var preview: Self {
+    static var demo: Self {
         let mnemonicsURL = Bundle.main.url(forResource: "mnemonics", withExtension: "")!
         let mnemonics = try! String(contentsOf: mnemonicsURL)
         return Account(name: "Development", mnemonics: mnemonics)
