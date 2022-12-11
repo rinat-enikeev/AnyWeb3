@@ -14,7 +14,7 @@ public extension FormatStyle where Self == ValueFormatStyle {
     }
 }
 
-public struct ValueStrategy: ParseStrategy {
+public struct ValueParseStrategy: ParseStrategy {
     public func parse(_ value: String) throws -> Value {
         return try Value(fractional: value)
     }
@@ -24,8 +24,8 @@ public struct ValueFormatStyle {
 }
     
 extension ValueFormatStyle: ParseableFormatStyle {
-    public var parseStrategy: ValueStrategy {
-        return ValueStrategy()
+    public var parseStrategy: ValueParseStrategy {
+        return ValueParseStrategy()
     }
     public func format(_ value: Value) -> String {
         value.fractional
