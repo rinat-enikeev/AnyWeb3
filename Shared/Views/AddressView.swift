@@ -11,6 +11,7 @@ struct AddressView: View {
     @Binding var address: Address
     @Binding var network: Network
     @Binding var transaction: Transaction
+    @Binding var account: Account
 
     @State var isNetworksPresented = false
     @State var isKeystoresPresented = false
@@ -44,7 +45,11 @@ struct AddressView: View {
                     NavigationStack {
                         AccountsView()
                             .navigationDestination(for: Account.self) { account in
-                                AccountView(address: $address, account: account)
+                                AccountView(
+                                    address: $address,
+                                    binding: $account,
+                                    account: account
+                                )
                             }
                         Button("Close") {
                             isKeystoresPresented = false
@@ -84,14 +89,16 @@ struct AddressView_PreviewContainer : View {
     @State var address: Address = .zero
     @State var network: Network = .development
     @State var transaction: Transaction = .zero
-
-     var body: some View {
-         AddressView(
-             address: $address,
-             network: $network,
-             transaction: $transaction
-         )
-     }
+    @State var account: Account = .demo
+    
+    var body: some View {
+        AddressView(
+            address: $address,
+            network: $network,
+            transaction: $transaction,
+            account: $account
+        )
+    }
 }
 #endif
 

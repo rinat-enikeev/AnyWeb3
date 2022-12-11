@@ -20,7 +20,8 @@ struct App: SwiftUI.App {
                     AddressView(
                         address: $state.address,
                         network: $state.network,
-                        transaction: $state.transaction
+                        transaction: $state.transaction,
+                        account: $state.account
                     )
                 }
             }

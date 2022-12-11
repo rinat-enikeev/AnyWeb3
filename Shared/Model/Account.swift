@@ -8,7 +8,7 @@
 import Foundation
 
 struct Account: Hashable, Identifiable {
-    var id: String { mnemonics }
+    var id = UUID().uuidString
     var name: String
     var mnemonics: String
 }
@@ -17,6 +17,6 @@ extension Account {
     static var demo: Self {
         let mnemonicsURL = Bundle.main.url(forResource: "mnemonics", withExtension: "")!
         let mnemonics = try! String(contentsOf: mnemonicsURL)
-        return Account(name: "Development", mnemonics: mnemonics)
+        return Account(name: "Demo", mnemonics: mnemonics)
     }
 }

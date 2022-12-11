@@ -12,6 +12,9 @@ packages:
   web3swift:
     url: https://github.com/web3swift-team/web3swift
     from: 3.0.6
+  KeychainAccess:
+    url: https://github.com/kishikawakatsumi/KeychainAccess
+    from: 4.2.2
 
 name: *APP_NAME
 
@@ -48,6 +51,7 @@ targets:
         CODE_SIGN_ENTITLEMENTS: iOS/iOS.entitlements
     dependencies:
       - package: web3swift
+      - package: KeychainAccess
     preBuildScripts:
       - script: 'if [ "${CONFIGURATION}" == "Debug" ]; then cp -r "${PROJECT_DIR}/truffle/mnemonics" "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app"; fi'
         name: "Copy mnemonics"

@@ -11,6 +11,7 @@ import SwiftUI
 struct AccountView: View {
     @StateObject var model = AccountModel()
     @Binding var address: Address
+    @Binding var binding: Account
     let account: Account
     
     var body: some View {
@@ -25,6 +26,7 @@ struct AccountView: View {
         }
         .task {
             do {
+                binding = account
                 model.account = account
                 try await model.load()
             } catch {
@@ -57,9 +59,10 @@ struct AccountView_Previews: PreviewProvider {
 
 struct AccountView_PreviewContainer : View {
     @State var address: Address = .zero
+    @State var binding: Account = .demo
     
     var body: some View {
-        AccountView(address: $address, account: .demo)
+        AccountView(address: $address, binding: $binding, account: .demo)
     }
 }
 #endif

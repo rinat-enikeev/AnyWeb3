@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AddAccount: View {
     @State var name: String = ""
-    @Binding var accounts: [Account]
+    @ObservedObject var accountsModel: AccountsModel
 
     var body: some View {
         VStack {
@@ -17,7 +17,7 @@ struct AddAccount: View {
             Button("Generate") {
                 do {
                     let actor = try AccountActor(name: name, password: "", language: .spanish)
-                    accounts.append(actor.account)
+                    accountsModel.store(actor.account)
                 } catch {
                     print(error.localizedDescription)
                 }
@@ -27,19 +27,3 @@ struct AddAccount: View {
         .padding()
     }
 }
-
-#if DEBUG
-struct AddAccount_Previews: PreviewProvider {
-    static var previews: some View {
-        AddAccount_PreviewContainer()
-    }
-}
-
-struct AddAccount_PreviewContainer : View {
-    @State var accounts: [Account] = [.demo]
-
-     var body: some View {
-         AddAccount(accounts: $accounts)
-     }
-}
-#endif

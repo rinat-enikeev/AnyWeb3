@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct AccountsView: View {
-    @State var accounts: [Account] = [.demo]
+    @StateObject var model = AccountsModel()
     @State var isAddAccountPresented = false
 
     var body: some View {
-        List(accounts) { account in
+        List(model.accounts) { account in
             NavigationLink(value: account) {
                 Text(account.name)
             }
@@ -25,7 +25,7 @@ struct AccountsView: View {
                 }
                 .sheet(isPresented: $isAddAccountPresented) {
                     NavigationStack {
-                        AddAccount(accounts: $accounts)
+                        AddAccount(accountsModel: model)
                         Button("Close") {
                             isAddAccountPresented = false
                         }
@@ -38,10 +38,17 @@ struct AccountsView: View {
     }
 }
 
-#if DEBUG
-struct AccountsView_Previews: PreviewProvider {
-    static var previews: some View {
-        AccountsView()
+final class AccountsModel: ObservableObject {
+    @Published var accounts: [Account] = []
+    private var accountsRepository = AccountsRepositoryKeychain()
+    
+    init() {
+        accountsRepository.accounts
+            .receive(on: RunLoop.main)
+            .assign(to: &$accounts)
+    }
+    
+    func store(_ account: Account) {
+        accountsRepository.storeAccount(account)
     }
 }
-#endif
