@@ -33,8 +33,8 @@ struct TransactionView: View {
             Button("Confirm") {
                 Task {
                     do {
-                        let web3Actor = await Web3Actor(network)
-                        try await web3Actor.sendTranscation(transaction)
+                        let transactionActor = await TransactionActor(network)
+                        try await transactionActor.sendTranscation(transaction)
                     } catch {
                         if let web3Error = error as? Web3Error {
                             print(web3Error.errorDescription)

@@ -22,6 +22,7 @@ struct AddAccount: View {
                     print(error.localizedDescription)
                 }
             }
+            .disabled(name.isEmpty)
         }
         .padding()
     }

@@ -1,5 +1,5 @@
 //
-//  Web3Actor.swift
+//  TransactionActor.swift
 //  AnyWeb3
 //
 //  Created by Rinat Enikeev on 03.12.2022.
@@ -10,9 +10,9 @@ import Core
 import Foundation
 import web3swift
 
-final actor Web3Actor {
+final actor TransactionActor {
     let web3: Web3
-    let network: Network
+    private let network: Network
     private let rpcUrl: URL
     
     init(_ network: Network) async {

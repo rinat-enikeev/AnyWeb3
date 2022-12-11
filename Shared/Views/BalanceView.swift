@@ -50,8 +50,8 @@ final class BalanceModel: ObservableObject {
     private var balanceActor: BalanceActor?
     
     func startPolling() async {
-        let web3 = await Web3Actor(network)
-        let actor = BalanceActor(address: address, web3Actor: web3)
+        let transactionActor = await TransactionActor(network)
+        let actor = BalanceActor(address: address, transactionActor: transactionActor)
         actor.balance
             .receive(on: RunLoop.main)
             .assign(to: &$balance)
