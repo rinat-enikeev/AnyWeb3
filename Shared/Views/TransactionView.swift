@@ -6,6 +6,7 @@
 //
 
 import BigInt
+import Combine
 import Core
 import SwiftUI
 
@@ -18,10 +19,10 @@ struct TransactionView: View {
             get: { transaction.to.address.address },
             set: { transaction.to = Address(address: $0) ?? .zero }
         )
-        let valueBinding = Binding<String>(
-            get: { transaction.value?.description ?? "0" },
-            set: { transaction.value = BigUInt($0) }
-        )
+//        let valueBinding = Binding<String>(
+//            get: { transaction.value?.description ?? "0" },
+//            set: { transaction.value = BigUInt($0) }
+//        )
         VStack {
             HStack {
                 Text("From: ")
@@ -31,7 +32,8 @@ struct TransactionView: View {
                 Text("To: ")
                 TextField("address", text: toBinding)
             }
-            TextField("Value", text: valueBinding)
+            TextField("Value", value: $transaction.value, format: .fractional)
+                .keyboardType(.decimalPad)
             Button("Confirm") {
                 Task {
                     do {
@@ -44,7 +46,7 @@ struct TransactionView: View {
                     }
                 }
             }
-            .disabled(transaction.value == 0 || transaction.value == nil)
+            .disabled(transaction.value?.value == 0 || transaction.value?.value == nil)
         }.padding()
     }
 }

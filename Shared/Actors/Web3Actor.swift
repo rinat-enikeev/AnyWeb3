@@ -28,7 +28,7 @@ final actor Web3Actor {
     func sendTranscation(_ transaction: Transaction) async throws {
         var web3Tx = CodableTransaction(to: transaction.to.address)
         web3Tx.from = transaction.from.address
-        web3Tx.value = transaction.value ?? 0
+        web3Tx.value = transaction.value?.value ?? 0
         let resolver = PolicyResolver(provider: web3.provider)
         try await resolver.resolveAll(for: &web3Tx)
         let result = try await web3.eth.send(web3Tx)

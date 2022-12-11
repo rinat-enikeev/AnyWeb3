@@ -11,7 +11,7 @@ import Foundation
 struct Transaction: Hashable {
     var from: Address
     var to: Address
-    var value: BigUInt?
+    var value: Value?
 }
 
 extension Transaction {

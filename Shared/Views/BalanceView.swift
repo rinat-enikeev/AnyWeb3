@@ -17,7 +17,7 @@ struct BalanceView: View {
     var body: some View {
         VStack {
             if let balance = model.balance {
-                Text(balance, format: .crypto())
+                Text(balance, format: .fractional)
             } else {
                 ProgressView()
             }
@@ -44,7 +44,7 @@ struct BalanceView: View {
 }
 
 final class BalanceModel: ObservableObject {
-    @Published var balance: BigUInt?
+    @Published var balance: Value?
     var address: Address = .zero
     var network: Network = .development
     private var balanceActor: BalanceActor?
