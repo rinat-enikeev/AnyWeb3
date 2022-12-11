@@ -19,10 +19,6 @@ struct TransactionView: View {
             get: { transaction.to.address.address },
             set: { transaction.to = Address(address: $0) ?? .zero }
         )
-//        let valueBinding = Binding<String>(
-//            get: { transaction.value?.description ?? "0" },
-//            set: { transaction.value = BigUInt($0) }
-//        )
         VStack {
             HStack {
                 Text("From: ")

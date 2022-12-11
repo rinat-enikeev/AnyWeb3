@@ -39,6 +39,24 @@ actor AccountActor {
         addresses.value.append(Address(address: address))
     }
     
+    init(name: String, password: String, language: BIP39Language) throws {
+        let bitsOfEntropy: Int = 128
+        guard let mnemonics = try BIP39.generateMnemonics(bitsOfEntropy: bitsOfEntropy, language: language) else {
+            throw Error.failedToGenerate
+        }
+        guard let keystore = try BIP32Keystore(
+            mnemonics: mnemonics,
+            password: password,
+            language: language
+        ) else {
+            throw Error.failedToGenerate
+        }
+        self.account = Account(name: name, mnemonics: mnemonics)
+        self.password = password
+        self.language = language
+        self.keystore = keystore
+    }
+    
     func startLoading() throws {
         for i in 1...9 {
             if Task.isCancelled { return }

@@ -8,7 +8,7 @@
 import Foundation
 
 struct Account: Hashable, Identifiable {
-    var id: String { name }
+    var id: String { mnemonics }
     var name: String
     var mnemonics: String
 }
