@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Network: Hashable, Identifiable {
+struct Network: Codable, Hashable, Identifiable {
     var id: String { name }
     var name: String
     var decimals: Int

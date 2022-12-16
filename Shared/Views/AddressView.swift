@@ -5,36 +5,23 @@
 //  Created by Rinat Enikeev on 04.12.2022.
 //
 
+import Factory
 import SwiftUI
 
 struct AddressView: View {
-    @Binding var address: Address
-    @Binding var network: Network
-    @Binding var transaction: Transaction
-    @Binding var account: Account
+    @EnvironmentObject var s: AppState
 
     @State var isNetworksPresented = false
     @State var isKeystoresPresented = false
-    @State var isTransactionPresented = false
     
     var body: some View {
         VStack {
-            BalanceView(address: $address, network: $network)
+            BalanceView(address: $s.address, network: $s.network)
             .padding()
-            Button("Send") {
-                isTransactionPresented = true
-            }
-            .sheet(isPresented: $isTransactionPresented) {
-                TransactionView(
-                    transaction: $transaction,
-                    network: $network
-                )
-                .presentationDetents([.medium])
-            }
             Spacer()
         }
-        .onChange(of: address) { _ in
-            transaction.from = address
+        .onChange(of: s.address) { _ in
+            s.transaction.from = s.address ?? .zero
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -46,8 +33,6 @@ struct AddressView: View {
                         AccountsView()
                             .navigationDestination(for: Account.self) { account in
                                 AccountView(
-                                    address: $address,
-                                    binding: $account,
                                     account: account
                                 )
                             }
@@ -65,7 +50,7 @@ struct AddressView: View {
                 }
                 .sheet(isPresented: $isNetworksPresented) {
                     VStack {
-                        NetworksView(network: $network)
+                        NetworksView()
                         Button("Close") {
                             isNetworksPresented = false
                         }
@@ -92,12 +77,7 @@ struct AddressView_PreviewContainer : View {
     @State var account: Account = .demo
     
     var body: some View {
-        AddressView(
-            address: $address,
-            network: $network,
-            transaction: $transaction,
-            account: $account
-        )
+        AddressView()
     }
 }
 #endif

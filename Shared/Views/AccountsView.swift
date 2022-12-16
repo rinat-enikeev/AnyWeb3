@@ -5,12 +5,13 @@
 //  Created by Rinat Enikeev on 04.12.2022.
 //
 
+import Factory
 import SwiftUI
 
 struct AccountsView: View {
     @StateObject var model = AccountsModel()
     @State var isAddAccountPresented = false
-
+    
     var body: some View {
         List(model.accounts) { account in
             NavigationLink(value: account) {
@@ -40,7 +41,8 @@ struct AccountsView: View {
 
 final class AccountsModel: ObservableObject {
     @Published var accounts: [Account] = []
-    private var accountsRepository = AccountsRepositoryKeychain()
+    @Injected(Container.accountsRepository)
+    private var accountsRepository
     
     init() {
         accountsRepository.accounts
@@ -49,6 +51,6 @@ final class AccountsModel: ObservableObject {
     }
     
     func store(_ account: Account) {
-        accountsRepository.storeAccount(account)
+        accountsRepository.addAccount(account)
     }
 }

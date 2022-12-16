@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Account: Hashable, Identifiable {
+struct Account: Codable, Hashable, Identifiable {
     var id = UUID().uuidString
     var name: String
     var mnemonics: String

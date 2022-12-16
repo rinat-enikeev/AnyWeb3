@@ -10,8 +10,8 @@ import Core
 import SwiftUI
 
 struct BalanceView: View {
-    @Binding var address: Address
-    @Binding var network: Network
+    @Binding var address: Address?
+    @Binding var network: Network?
     @StateObject var model = BalanceModel()
     
     var body: some View {
@@ -45,11 +45,12 @@ struct BalanceView: View {
 
 final class BalanceModel: ObservableObject {
     @Published var balance: Value?
-    var address: Address = .zero
-    var network: Network = .development
+    var address: Address?
+    var network: Network?
     private var balanceActor: BalanceActor?
     
     func startPolling() async {
+        guard let network, let address else { return }
         let transactionActor = await TransactionActor(network)
         let actor = BalanceActor(address: address, transactionActor: transactionActor)
         actor.balance
@@ -68,9 +69,8 @@ struct BalanceView_Previews: PreviewProvider {
 }
 
 struct BalanceView_PreviewContainer : View {
-    @State var address: Address = .zero
-    @State var network: Network = .development
-    @State var transaction: Transaction = .zero
+    @State var address: Address? = .zero
+    @State var network: Network? = .development
 
      var body: some View {
          BalanceView(address: $address, network: $network)

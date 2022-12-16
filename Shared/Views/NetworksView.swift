@@ -5,19 +5,17 @@
 //  Created by Rinat Enikeev on 03.12.2022.
 //
 
+import Factory
 import SwiftUI
 
 struct NetworksView: View {
     let networks: [Network] = [.development, .ethereum, .gnosis]
-    @Binding var network: Network
+    @Injected(Container.settingsRepository)
+    private var settingsRepository
     
     var body: some View {
         VStack {
-            let selection = Binding<Network?>(
-                get: { network },
-                set: { network = $0 ?? .development }
-            )
-            List(networks, id: \.self, selection: selection) { network in
+            List(networks, id: \.self, selection: settingsRepository.networkBinding) { network in
                 Text(network.name)
             }
         }
@@ -32,10 +30,8 @@ struct NetworksView_Previews: PreviewProvider {
 }
 
 struct NetworksView_PreviewContainer : View {
-    @State var network: Network = .development
-    
     var body: some View {
-        NetworksView(network: $network)
+        NetworksView()
     }
 }
 #endif

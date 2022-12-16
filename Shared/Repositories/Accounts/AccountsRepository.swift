@@ -10,7 +10,5 @@ import Foundation
 
 protocol AccountsRepository {
     var accounts: CurrentValueSubject<[Account], Never> { get }
-    var lastUsedAccount: Account? { get }
-
-    func storeAccount(_ account: Account)
+    func addAccount(_ account: Account)
 }

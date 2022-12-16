@@ -15,6 +15,9 @@ packages:
   KeychainAccess:
     url: https://github.com/kishikawakatsumi/KeychainAccess
     from: 4.2.2
+  Factory:
+    url: https://github.com/hmlongco/Factory
+    from: 1.2.9
 
 name: *APP_NAME
 
@@ -52,6 +55,7 @@ targets:
     dependencies:
       - package: web3swift
       - package: KeychainAccess
+      - package: Factory
     preBuildScripts:
       - script: 'if [ "${CONFIGURATION}" == "Debug" ]; then cp -r "${PROJECT_DIR}/truffle/mnemonics" "${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app"; fi'
         name: "Copy mnemonics"

@@ -11,18 +11,6 @@ import KeychainAccess
 
 final class AccountsRepositoryKeychain: AccountsRepository {
     let accounts: CurrentValueSubject<[Account], Never>
-    var lastUsedAccount: Account? {
-        get {
-            guard let uuid = userDefaults.string(forKey: lastUsedAccountKey) else { return .demo }
-            guard let mnemonics = keychain[uuid] else { return .demo }
-            guard let name = userDefaults.string(forKey: uuid) else { return .demo }
-            return Account(id: uuid, name: name, mnemonics: mnemonics)
-        }
-        set {
-            userDefaults.set(newValue?.id, forKey: lastUsedAccountKey)
-        }
-    }
-    private let lastUsedAccountKey = "AccountsRepositoryKeychain.lastUsedAccountKey"
     private let keychain: Keychain
     private let userDefaults: UserDefaults
     
@@ -39,7 +27,7 @@ final class AccountsRepositoryKeychain: AccountsRepository {
         accounts.value.append(.demo)
     }
     
-    func storeAccount(_ account: Account) {
+    func addAccount(_ account: Account) {
         keychain[account.id] = account.mnemonics
         accounts.value.append(account)
         userDefaults.setValue(account.name, forKey: account.id)

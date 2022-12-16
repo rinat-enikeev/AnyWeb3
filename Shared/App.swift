@@ -9,20 +9,16 @@ import SwiftUI
 
 @main
 struct App: SwiftUI.App {
-    @StateObject var state = AppState()
+    @StateObject var s = AppState()
 
     var body: some Scene {
         WindowGroup {
             VStack {
-                Text(state.network.name)
-                Text(state.address, format: .shorten)
-                NavigationStack(path: $state.path) {
-                    AddressView(
-                        address: $state.address,
-                        network: $state.network,
-                        transaction: $state.transaction,
-                        account: $state.account
-                    )
+                Text(s.network?.name ?? "N/A")
+                Text(s.address ?? .zero, format: .shorten)
+                NavigationStack(path: $s.path) {
+                    AddressView()
+                        .environmentObject(s)
                 }
             }
         }

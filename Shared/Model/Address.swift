@@ -8,7 +8,7 @@
 import Core
 import Foundation
 
-public struct Address: Hashable, Identifiable {
+public struct Address: Codable, Hashable, Identifiable {
     public var id: String { address.address }
     public var address: EthereumAddress
     

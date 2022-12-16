@@ -6,27 +6,24 @@
 //
 
 import Core
+import Factory
 import SwiftUI
 
 struct AccountView: View {
     @StateObject var model = AccountModel()
-    @Binding var address: Address
-    @Binding var binding: Account
     let account: Account
+    @Injected(Container.userRepository)
+    private var userRepository
     
     var body: some View {
         VStack {
-            let selection = Binding<Address?>(
-                get: { address },
-                set: { address = $0 ?? .zero }
-            )
-            List(model.addresses, id: \.self, selection: selection) { address in
+            List(model.addresses, id: \.self, selection: userRepository.addressBinding) { address in
                 Text(address, format: .shorten)
             }
         }
         .task {
             do {
-                binding = account
+                userRepository.selectAccount(account)
                 model.account = account
                 try await model.load()
             } catch {
@@ -62,7 +59,7 @@ struct AccountView_PreviewContainer : View {
     @State var binding: Account = .demo
     
     var body: some View {
-        AccountView(address: $address, binding: $binding, account: .demo)
+        AccountView(account: .demo)
     }
 }
 #endif
