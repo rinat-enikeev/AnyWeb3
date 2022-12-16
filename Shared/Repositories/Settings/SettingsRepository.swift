@@ -12,7 +12,6 @@ protocol SettingsRepository {
     var network: Network? { get }
     var networkPublished: Published<Network?> { get }
     var networkPublisher: Published<Network?>.Publisher { get }
-    
     func selectNetwork(_ network: Network?)
 }
 

@@ -12,12 +12,11 @@ protocol UserRepository {
     var account: Account? { get }
     var accountPublished: Published<Account?> { get }
     var accountPublisher: Published<Account?>.Publisher { get }
+    func selectAccount(_ account: Account?)
 
     var address: Address? { get }
     var addressPublished: Published<Address?> { get }
     var addressPublisher: Published<Address?>.Publisher { get }
-
-    func selectAccount(_ account: Account?)
     func selectAddress(_ address: Address?)
 }
 
