@@ -15,18 +15,20 @@ struct App: SwiftUI.App {
     var body: some Scene {
         WindowGroup {
             VStack {
-                if let network = model.network {
-                    Text(network.name)
+                if model.address == nil {
+                    NavigationStack {
+                        WelcomeView()
+                    }
                 } else {
-                    ProgressView()
-                }
-                if let address = model.address {
-                    Text(address, format: .shorten)
-                } else {
-                    ProgressView()
-                }
-                NavigationStack(path: $model.path) {
-                    AddressView()
+                    if let network = model.network {
+                        Text(network.name)
+                    }
+                    if let address = model.address {
+                        Text(address, format: .shorten)
+                    }
+                    NavigationStack {
+                        AddressView()
+                    }
                 }
             }
         }
@@ -34,7 +36,6 @@ struct App: SwiftUI.App {
 }
 
 class AppModel: ObservableObject {
-    @Published var path = NavigationPath()
     @Published var address: Address?
     @Published var network: Network?
     

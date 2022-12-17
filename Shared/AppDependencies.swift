@@ -19,4 +19,12 @@ extension Container {
     static let settingsRepository = Factory(scope: .shared) {
         SettingsRepositoryImpl() as SettingsRepository
     }
+    
+    static let keystoreActor = Factory(scope: .shared) {
+        KeystoreActor()
+    }
+    
+    static let accountService = Factory(scope: .shared) {
+        AccountServiceImpl() as AccountService
+    }
 }

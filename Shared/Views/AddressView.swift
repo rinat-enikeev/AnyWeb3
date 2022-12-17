@@ -26,17 +26,12 @@ struct AddressView: View {
                 .sheet(isPresented: $isKeystoresPresented) {
                     NavigationStack {
                         AccountsView()
-                            .navigationDestination(for: Account.self) { account in
-                                AccountView(
-                                    account: account
-                                )
-                            }
                         Button("Close") {
                             isKeystoresPresented = false
                         }
                         .padding()
                     }
-                    .presentationDetents([.medium])
+                    .presentationDetents([.medium, .large])
                 }
             }
             ToolbarItem(placement: .navigationBarLeading) {

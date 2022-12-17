@@ -12,5 +12,5 @@ protocol AccountsRepository {
     var accounts: [Account] { get }
     var accountsPublished: Published<[Account]> { get }
     var accountsPublisher: Published<[Account]>.Publisher { get }
-    func appendAccount(_ account: Account)
+    func appendAccount(_ account: Account, keystore: Keystore)
 }

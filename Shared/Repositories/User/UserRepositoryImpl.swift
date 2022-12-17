@@ -25,11 +25,14 @@ final class UserRepositoryImpl: UserRepository {
         address = addressStorage
     }
     
+    @MainActor
     func setAccount(_ account: Account?) {
         self.account = account
         self.accountStorage = account
+        setAddress(account?.firstAddress)
     }
     
+    @MainActor
     func setAddress(_ address: Address?) {
         self.address = address
         self.addressStorage = address

@@ -8,47 +8,61 @@
 import Factory
 import SwiftUI
 
+enum AccountsState {
+    case idle
+    case loading
+    case error
+}
+
 struct AccountsView: View {
-    @StateObject var model = AccountsModel()
-    @State var isAddAccountPresented = false
+    @State
+    private var state: AccountsState = .idle
+    @Injected(Container.userRepository)
+    private var userRepository
+    @Injected(Container.accountsRepository)
+    private var accountsRepository
+    @Injected(Container.accountService)
+    private var accountService
     
     var body: some View {
-        List(model.accounts) { account in
-            NavigationLink(value: account) {
-                Text(account.name)
+        VStack {
+            switch state {
+            case .idle:
+                List(
+                    accountsRepository.accounts,
+                    id: \.self,
+                    selection: userRepository.accountBinding
+                ) { account in
+                    Text(account.firstAddress, format: .shorten)
+                }
+            case .loading:
+                ProgressView()
+            case .error:
+                Text("Error")
+                Button("OK") {
+                    state = .idle
+                }
             }
         }
         .navigationTitle("Accounts")
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button("Add") {
-                    isAddAccountPresented = true
-                }
-                .sheet(isPresented: $isAddAccountPresented) {
-                    NavigationStack {
-                        AddAccount(accountsModel: model)
-                        Button("Close") {
-                            isAddAccountPresented = false
+                    state = .loading
+                    Task {
+                        do {
+                            try await accountService.createAccount()
+                            await MainActor.run {
+                                state = .idle
+                            }
+                        } catch {
+                            await MainActor.run {
+                                state = .error
+                            }
                         }
-                        .padding()
                     }
-                    .presentationDetents([.medium])
                 }
             }
         }
-    }
-}
-
-final class AccountsModel: ObservableObject {
-    @Published var accounts: [Account] = []
-    @Injected(Container.accountsRepository)
-    private var accountsRepository
-    
-    init() {
-        accountsRepository.accountsPublisher.assign(to: &$accounts)
-    }
-    
-    func store(_ account: Account) {
-        accountsRepository.appendAccount(account)
     }
 }
