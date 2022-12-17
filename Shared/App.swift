@@ -5,22 +5,46 @@
 //  Created by Rinat Enikeev on 03.12.2022.
 //
 
+import Factory
 import SwiftUI
 
 @main
 struct App: SwiftUI.App {
-    @StateObject var s = AppState()
+    @StateObject var model = AppModel()
 
     var body: some Scene {
         WindowGroup {
             VStack {
-                Text(s.network?.name ?? "N/A")
-                Text(s.address ?? .zero, format: .shorten)
-                NavigationStack(path: $s.path) {
+                if let network = model.network {
+                    Text(network.name)
+                } else {
+                    ProgressView()
+                }
+                if let address = model.address {
+                    Text(address, format: .shorten)
+                } else {
+                    ProgressView()
+                }
+                NavigationStack(path: $model.path) {
                     AddressView()
-                        .environmentObject(s)
                 }
             }
         }
+    }
+}
+
+class AppModel: ObservableObject {
+    @Published var path = NavigationPath()
+    @Published var address: Address?
+    @Published var network: Network?
+    
+    @Injected(Container.userRepository)
+    private var userRepository
+    @Injected(Container.settingsRepository)
+    private var settingsRepository
+    
+    init() {
+        userRepository.addressPublisher.assign(to: &$address)
+        settingsRepository.networkPublisher.assign(to: &$network)
     }
 }

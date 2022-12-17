@@ -7,11 +7,10 @@
 
 import BigInt
 import Core
+import Factory
 import SwiftUI
 
 struct BalanceView: View {
-    @Binding var address: Address?
-    @Binding var network: Network?
     @StateObject var model = BalanceModel()
     
     var body: some View {
@@ -22,10 +21,10 @@ struct BalanceView: View {
                 ProgressView()
             }
         }
-        .onChange(of: network) { _ in
+        .onChange(of: model.network) { _ in
             restartPolling()
         }
-        .onChange(of: address) { _ in
+        .onChange(of: model.address) { _ in
             restartPolling()
         }
         .task {
@@ -35,8 +34,6 @@ struct BalanceView: View {
     
     private func restartPolling() {
         model.balance = nil
-        model.address = address
-        model.network = network
         Task {
             await model.startPolling()
         }
@@ -45,9 +42,20 @@ struct BalanceView: View {
 
 final class BalanceModel: ObservableObject {
     @Published var balance: Value?
-    var address: Address?
-    var network: Network?
+    @Published var address: Address?
+    @Published var network: Network?
+
+    @Injected(Container.userRepository)
+    private var userRepository
+    @Injected(Container.settingsRepository)
+    private var settingsRepository
+    
     private var balanceActor: BalanceActor?
+    
+    init() {
+        userRepository.addressPublisher.assign(to: &$address)
+        settingsRepository.networkPublisher.assign(to: &$network)
+    }
     
     func startPolling() async {
         guard let network, let address else { return }
@@ -73,7 +81,7 @@ struct BalanceView_PreviewContainer : View {
     @State var network: Network? = .development
 
      var body: some View {
-         BalanceView(address: $address, network: $network)
+         BalanceView()
      }
 }
 #endif

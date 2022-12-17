@@ -9,19 +9,14 @@ import Factory
 import SwiftUI
 
 struct AddressView: View {
-    @EnvironmentObject var s: AppState
-
     @State var isNetworksPresented = false
     @State var isKeystoresPresented = false
     
     var body: some View {
         VStack {
-            BalanceView(address: $s.address, network: $s.network)
+            BalanceView()
             .padding()
             Spacer()
-        }
-        .onChange(of: s.address) { _ in
-            s.transaction.from = s.address ?? .zero
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
