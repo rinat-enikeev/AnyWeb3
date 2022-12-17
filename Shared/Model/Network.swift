@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Network: Hashable, Identifiable {
+struct Network: Codable, Hashable, Identifiable {
     var id: String { name }
     var name: String
     var decimals: Int
@@ -21,7 +21,7 @@ extension Network {
             name: "Development",
             decimals: 18,
             rpcUrl: URL(string: "http://127.0.0.1:8545")!,
-            chainId: 100
+            chainId: 1337
         )
     }
     

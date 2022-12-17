@@ -8,19 +8,24 @@
 import Core
 import Foundation
 
-final class Address: ObservableObject, Hashable, Identifiable {
-    var id: UUID = UUID()
-    var address: EthereumAddress
+public struct Address: Codable, Hashable, Identifiable {
+    public var id: String { address.address }
+    public var address: EthereumAddress
     
-    init(address: EthereumAddress) {
+    public init(address: EthereumAddress) {
         self.address = address
     }
-    
-    static func == (lhs: Address, rhs: Address) -> Bool {
-        lhs.id == rhs.id
+}
+
+extension Address {
+    init?(address: String) {
+        guard let address = EthereumAddress(address) else { return nil }
+        self.init(address: address)
     }
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
+}
+
+extension Address {
+    static var zero: Self {
+        Address(address: EthereumAddress.zero)
     }
 }

@@ -7,22 +7,81 @@
 
 import BigInt
 import Core
+import Factory
 import SwiftUI
 
 struct BalanceView: View {
-    @EnvironmentObject var state: AppState
-    @Binding var balance: Balance?
-
+    @StateObject var model = BalanceModel()
+    
     var body: some View {
-        if let balance, let value = balance.repository.balance.value {
-            Text(
-                value,
-                format: .crypto(
-                    decimals: balance.repository.connection.repository.network.decimals
-                )
-            )
-        } else {
-            ProgressView()
+        VStack {
+            if let balance = model.balance {
+                Text(balance, format: .fractional)
+            } else {
+                ProgressView()
+            }
+        }
+        .onChange(of: model.network) { _ in
+            restartPolling()
+        }
+        .onChange(of: model.address) { _ in
+            restartPolling()
+        }
+        .task {
+            restartPolling()
+        }
+    }
+    
+    private func restartPolling() {
+        model.balance = nil
+        Task {
+            await model.startPolling()
         }
     }
 }
+
+final class BalanceModel: ObservableObject {
+    @Published var balance: Value?
+    @Published var address: Address?
+    @Published var network: Network?
+
+    @Injected(Container.userRepository)
+    private var userRepository
+    @Injected(Container.settingsRepository)
+    private var settingsRepository
+    
+    private var balanceRepository: BalanceRepository?
+    
+    init() {
+        userRepository.addressPublisher.assign(to: &$address)
+        settingsRepository.networkPublisher.assign(to: &$network)
+    }
+    
+    func startPolling() async {
+        guard let network, let address else { return }
+        let repository = await Container.balanceRepositoryBuilder((network, address))()
+        repository
+            .balancePublisher
+            .receive(on: RunLoop.main)
+            .assign(to: &$balance)
+        balanceRepository = repository
+    }
+}
+
+#if DEBUG
+struct BalanceView_Previews: PreviewProvider {
+    static var previews: some View {
+        BalanceView_PreviewContainer()
+    }
+}
+
+struct BalanceView_PreviewContainer : View {
+    @State var address: Address? = .zero
+    @State var network: Network? = .development
+
+     var body: some View {
+         BalanceView()
+     }
+}
+#endif
+

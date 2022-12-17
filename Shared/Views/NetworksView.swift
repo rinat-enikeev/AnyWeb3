@@ -5,18 +5,33 @@
 //  Created by Rinat Enikeev on 03.12.2022.
 //
 
+import Factory
 import SwiftUI
 
 struct NetworksView: View {
-    @EnvironmentObject var state: AppState
-    @State var networks: [Network] = [.development, .gnosis, .ethereum]
+    let networks: [Network] = [.development, .ethereum, .gnosis]
+    @Injected(Container.settingsRepository)
+    private var settingsRepository
     
     var body: some View {
-        List(networks) { network in
-            NavigationLink(value: network) {
+        VStack {
+            List(networks, id: \.self, selection: settingsRepository.networkBinding) { network in
                 Text(network.name)
             }
         }
-        .navigationTitle("Networks")
     }
 }
+
+#if DEBUG
+struct NetworksView_Previews: PreviewProvider {
+    static var previews: some View {
+        NetworksView_PreviewContainer()
+    }
+}
+
+struct NetworksView_PreviewContainer : View {
+    var body: some View {
+        NetworksView()
+    }
+}
+#endif
