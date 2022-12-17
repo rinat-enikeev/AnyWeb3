@@ -61,11 +61,6 @@ struct AddressView_Previews: PreviewProvider {
 }
 
 struct AddressView_PreviewContainer : View {
-    @State var address: Address = .zero
-    @State var network: Network = .development
-    @State var transaction: Transaction = .zero
-    @State var account: Account = .demo
-    
     var body: some View {
         AddressView()
     }

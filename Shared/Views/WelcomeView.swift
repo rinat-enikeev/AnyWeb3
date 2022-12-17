@@ -25,8 +25,20 @@ struct WelcomeView: View {
             switch state {
             case .idle:
                 Spacer()
-                NavigationLink("I already have a wallet", destination: EmptyView())
-                    .disabled(true)
+                #if DEBUG
+                Button("Use demo wallet") {
+                    state = .loading
+                    Task {
+                        do {
+                            try await accountService.createDemoAccount()
+                        } catch {
+                            await MainActor.run {
+                                state = .error
+                            }
+                        }
+                    }
+                }
+                #endif
                 Button("Create new wallet") {
                     state = .loading
                     Task {

@@ -36,4 +36,19 @@ final actor KeystoreActor {
         }
         return Keystore(mnemonics: mnemonics, web3: keystore)
     }
+    
+    func generate(
+        mnemonics: String,
+        language: Language,
+        password: String
+    ) throws -> Keystore {
+        guard let keystore = try BIP32Keystore(
+            mnemonics: mnemonics,
+            password: password,
+            language: language.web3
+        ) else {
+            throw Error.failedToInitialize
+        }
+        return Keystore(mnemonics: mnemonics, web3: keystore)
+    }
 }

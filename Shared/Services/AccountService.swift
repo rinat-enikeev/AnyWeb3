@@ -7,4 +7,7 @@
 
 protocol AccountService {
     func createAccount() async throws
+    #if DEBUG
+    func createDemoAccount() async throws
+    #endif
 }

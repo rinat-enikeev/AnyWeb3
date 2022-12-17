@@ -32,4 +32,23 @@ final class AccountServiceImpl: AccountService {
         await userRepository.setAccount(account)
         await userRepository.setAddress(keystore.addresses?.first)
     }
+    #if DEBUG
+    func createDemoAccount() async throws {
+        let mnemonicsURL = Bundle.main.url(forResource: "mnemonics", withExtension: "")!
+        let mnemonics = try String(contentsOf: mnemonicsURL)
+        let keystore = try await keystoreActor.generate(
+            mnemonics: mnemonics,
+            language: .spanish,
+            password: ""
+        )
+        guard let firstAddress = keystore.addresses?.first else {
+            throw Error.failedToGetFirstAddress
+        }
+        let account = Account(firstAddress: firstAddress)
+        accountsRepository.appendAccount(account, keystore: keystore)
+        await userRepository.setAccount(account)
+        await userRepository.setAddress(keystore.addresses?.first)
+        
+    }
+    #endif
 }

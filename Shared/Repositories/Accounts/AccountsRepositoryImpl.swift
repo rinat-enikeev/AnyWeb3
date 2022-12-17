@@ -22,9 +22,6 @@ final class AccountsRepositoryImpl: AccountsRepository {
             return Address(address: $0).map(Account.init)
         }
         self.keychain = keychain
-        #if DEBUG
-        accounts.append(.demo)
-        #endif
     }
     
     func appendAccount(_ account: Account, keystore: Keystore) {

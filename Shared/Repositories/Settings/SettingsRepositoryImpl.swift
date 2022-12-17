@@ -15,7 +15,11 @@ final class SettingsRepositoryImpl: SettingsRepository {
     var networkStorage: Network?
     
     init() {
+        #if DEBUG
+        network = networkStorage ?? .development // by default
+        #else
         network = networkStorage ?? .ethereum // by default
+        #endif
     }
     
     func setNetwork(_ network: Network?) {
