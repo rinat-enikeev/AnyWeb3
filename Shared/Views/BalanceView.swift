@@ -50,7 +50,7 @@ final class BalanceModel: ObservableObject {
     @Injected(Container.settingsRepository)
     private var settingsRepository
     
-    private var balanceActor: BalanceActor?
+    private var balanceRepository: BalanceRepository?
     
     init() {
         userRepository.addressPublisher.assign(to: &$address)
@@ -59,13 +59,12 @@ final class BalanceModel: ObservableObject {
     
     func startPolling() async {
         guard let network, let address else { return }
-        let transactionActor = await TransactionActor(network)
-        let actor = BalanceActor(address: address, transactionActor: transactionActor)
-        actor.balance
+        let repository = await Container.balanceRepositoryBuilder((network, address))()
+        repository
+            .balancePublisher
             .receive(on: RunLoop.main)
             .assign(to: &$balance)
-        actor.startPolling()
-        balanceActor = actor
+        balanceRepository = repository
     }
 }
 

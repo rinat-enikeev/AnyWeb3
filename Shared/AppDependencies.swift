@@ -7,6 +7,14 @@
 
 import Factory
 
+typealias BalanceActorBuilder = () async -> BalanceRepository
+
+extension Container {
+    static let balanceRepositoryBuilder = ParameterFactory<(Network, Address), BalanceActorBuilder> { network, address in
+        { await BalanceRepositoryImpl(address: address, network: network)  }
+    }
+}
+
 extension Container {
     static let accountsRepository = Factory(scope: .shared) {
         AccountsRepositoryImpl() as AccountsRepository
