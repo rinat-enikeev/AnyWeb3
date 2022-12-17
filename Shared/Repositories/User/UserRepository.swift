@@ -12,26 +12,26 @@ protocol UserRepository {
     var account: Account? { get }
     var accountPublished: Published<Account?> { get }
     var accountPublisher: Published<Account?>.Publisher { get }
-    func selectAccount(_ account: Account?)
+    func setAccount(_ account: Account?)
 
     var address: Address? { get }
     var addressPublished: Published<Address?> { get }
     var addressPublisher: Published<Address?>.Publisher { get }
-    func selectAddress(_ address: Address?)
+    func setAddress(_ address: Address?)
 }
 
 extension UserRepository {
     var accountBinding: Binding<Account?> {
         Binding<Account?>(
             get: { account },
-            set: { selectAccount($0) }
+            set: { setAccount($0) }
         )
     }
     
     var addressBinding: Binding<Address?> {
         Binding<Address?>(
             get: { address },
-            set: { selectAddress($0) }
+            set: { setAddress($0) }
         )
     }
 }

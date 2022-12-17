@@ -18,7 +18,7 @@ final class SettingsRepositoryImpl: SettingsRepository {
         network = networkStorage
     }
     
-    func selectNetwork(_ network: Network?) {
+    func setNetwork(_ network: Network?) {
         self.network = network
         self.networkStorage = network
     }

@@ -12,14 +12,14 @@ protocol SettingsRepository {
     var network: Network? { get }
     var networkPublished: Published<Network?> { get }
     var networkPublisher: Published<Network?>.Publisher { get }
-    func selectNetwork(_ network: Network?)
+    func setNetwork(_ network: Network?)
 }
 
 extension SettingsRepository {
     var networkBinding: Binding<Network?> {
         Binding<Network?>(
             get: { network },
-            set: { selectNetwork($0) }
+            set: { setNetwork($0) }
         )
     }
 }

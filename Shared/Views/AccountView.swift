@@ -23,7 +23,7 @@ struct AccountView: View {
         }
         .task {
             do {
-                userRepository.selectAccount(account)
+                userRepository.setAccount(account)
                 model.account = account
                 try await model.load()
             } catch {
