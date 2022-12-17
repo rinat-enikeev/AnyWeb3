@@ -9,7 +9,7 @@ import Factory
 
 extension Container {
     static let accountsRepository = Factory(scope: .shared) {
-        AccountsRepositoryKeychain() as AccountsRepository
+        AccountsRepositoryImpl() as AccountsRepository
     }
     
     static let userRepository = Factory(scope: .shared) {

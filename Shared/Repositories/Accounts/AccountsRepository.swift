@@ -9,6 +9,8 @@ import Combine
 import Foundation
 
 protocol AccountsRepository {
-    var accounts: CurrentValueSubject<[Account], Never> { get }
-    func addAccount(_ account: Account)
+    var accounts: [Account] { get }
+    var accountsPublished: Published<[Account]> { get }
+    var accountsPublisher: Published<[Account]>.Publisher { get }
+    func appendAccount(_ account: Account)
 }

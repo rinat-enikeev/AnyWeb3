@@ -45,12 +45,10 @@ final class AccountsModel: ObservableObject {
     private var accountsRepository
     
     init() {
-        accountsRepository.accounts
-            .receive(on: RunLoop.main)
-            .assign(to: &$accounts)
+        accountsRepository.accountsPublisher.assign(to: &$accounts)
     }
     
     func store(_ account: Account) {
-        accountsRepository.addAccount(account)
+        accountsRepository.appendAccount(account)
     }
 }
