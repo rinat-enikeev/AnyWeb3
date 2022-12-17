@@ -34,17 +34,21 @@ final class BalanceRepositoryImpl: BalanceRepository {
     }
     
     func startPolling() {
-        Timer.publish(every: 6, on: .main, in: .default)
+        cancellable = Timer.publish(every: 6, on: .main, in: .default)
             .autoconnect()
             .prepend(Date())
-            .await { [weak self] _ in
-                guard let self = self else { return nil }
+            .await { [weak self] _ -> Value? in
+                guard let self = self else {
+                    return nil
+                }
                 let value = try await self.web3.eth.getBalance(
                     for: self.address.address
                 )
                 return Value(value)
             }
             .receive(on: RunLoop.main)
-            .assign(to: &$balance)
+            .sink { [weak self] value in
+                self?.balance = value
+            }
     }
 }
