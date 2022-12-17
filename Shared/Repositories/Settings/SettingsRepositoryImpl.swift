@@ -15,7 +15,7 @@ final class SettingsRepositoryImpl: SettingsRepository {
     var networkStorage: Network?
     
     init() {
-        network = networkStorage
+        network = networkStorage ?? .ethereum // by default
     }
     
     func setNetwork(_ network: Network?) {
