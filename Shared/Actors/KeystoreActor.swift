@@ -5,9 +5,9 @@
 //  Created by Rinat Enikeev on 17.12.2022.
 //
 
-import Core
 import Combine
 import Foundation
+import Web3Core
 import web3swift
 
 final actor KeystoreActor {

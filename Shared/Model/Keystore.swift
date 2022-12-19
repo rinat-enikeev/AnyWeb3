@@ -5,8 +5,8 @@
 //  Created by Rinat Enikeev on 17.12.2022.
 //
 
-import Core
 import Foundation
+import Web3Core
 
 struct Keystore {
     var mnemonics: String

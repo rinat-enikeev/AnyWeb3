@@ -5,8 +5,10 @@
 //  Created by Rinat Enikeev on 04.12.2022.
 //
 
-import Core
 import Foundation
+import Web3Core
+import web3swift
+
 
 public struct Address: Codable, Hashable, Identifiable {
     public var id: String { address.address }
@@ -26,6 +28,6 @@ extension Address {
 
 extension Address {
     static var zero: Self {
-        Address(address: EthereumAddress.zero)
+        Address(address: .zero)
     }
 }

@@ -11,7 +11,7 @@ settings:
 packages:
   web3swift:
     url: https://github.com/web3swift-team/web3swift
-    from: 3.0.6
+    branch: develop
   KeychainAccess:
     url: https://github.com/kishikawakatsumi/KeychainAccess
     from: 4.2.2
