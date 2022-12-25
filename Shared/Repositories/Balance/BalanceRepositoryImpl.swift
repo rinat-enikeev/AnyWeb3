@@ -21,13 +21,13 @@ final class BalanceRepositoryImpl: BalanceRepository {
     private let web3: Web3
     private var cancellable: Cancellable?
 
-    init(address: Address, network: Network) async {
+    init(address: Address, network: Network) {
         self.address = address
         self.network = network
-        let provider = await Web3HttpProvider(
-            network.rpcUrl,
+        let provider = Web3HttpProvider(
+            url: network.rpcUrl,
             network: .Custom(networkID: BigUInt(network.chainId))
-        )!
+        )
         self.web3 = Web3(provider: provider)
         
         startPolling()

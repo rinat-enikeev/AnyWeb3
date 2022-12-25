@@ -7,11 +7,9 @@
 
 import Factory
 
-typealias BalanceActorBuilder = () async -> BalanceRepository
-
 extension Container {
-    static let balanceRepositoryBuilder = ParameterFactory<(Network, Address), BalanceActorBuilder> { network, address in
-        { await BalanceRepositoryImpl(address: address, network: network)  }
+    static let balanceRepository = ParameterFactory<(Network, Address), BalanceRepository> { network, address in
+        BalanceRepositoryImpl(address: address, network: network) as BalanceRepository
     }
 }
 

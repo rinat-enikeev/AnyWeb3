@@ -34,9 +34,7 @@ struct BalanceView: View {
     
     private func restartPolling() {
         model.balance = nil
-        Task {
-            await model.startPolling()
-        }
+        model.startPolling()
     }
 }
 
@@ -57,9 +55,9 @@ final class BalanceModel: ObservableObject {
         settingsRepository.networkPublisher.assign(to: &$network)
     }
     
-    func startPolling() async {
+    func startPolling() {
         guard let network, let address else { return }
-        let repository = await Container.balanceRepositoryBuilder((network, address))()
+        let repository = Container.balanceRepository((network, address))
         repository
             .balancePublisher
             .receive(on: RunLoop.main)
