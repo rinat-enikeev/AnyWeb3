@@ -34,7 +34,7 @@ final class BalanceRepositoryImpl: BalanceRepository {
     }
     
     func startPolling() {
-        cancellable = Timer.publish(every: 6, on: .main, in: .default)
+        cancellable = Timer.publish(every: .pollingInterval, on: .main, in: .default)
             .autoconnect()
             .prepend(Date())
             .await { [weak self] _ -> Value? in

@@ -15,7 +15,9 @@ struct DashboardView: View {
     var body: some View {
         VStack {
             BalanceView()
-            .padding()
+                .padding()
+            TransactionView()
+                .padding()
             Spacer()
         }
         .toolbar {

@@ -9,9 +9,11 @@ import BigInt
 import Foundation
 
 struct Transaction: Hashable {
-    var from: Address
-    var to: Address
+    var from: Address?
+    var to: Address?
     var value: Value?
+    var gasLimit: Value?
+    var gasPrice: Value?
 }
 
 extension Transaction {
