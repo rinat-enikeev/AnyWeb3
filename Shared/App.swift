@@ -27,7 +27,7 @@ struct App: SwiftUI.App {
                         Text(address, format: .shorten)
                     }
                     NavigationStack {
-                        AddressView()
+                        DashboardView()
                     }
                 }
             }

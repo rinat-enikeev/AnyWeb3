@@ -1,5 +1,5 @@
 //
-//  AddressView.swift
+//  DashboardView.swift
 //  AnyWeb3
 //
 //  Created by Rinat Enikeev on 04.12.2022.
@@ -8,7 +8,7 @@
 import Factory
 import SwiftUI
 
-struct AddressView: View {
+struct DashboardView: View {
     @State var isNetworksPresented = false
     @State var isKeystoresPresented = false
     
@@ -62,7 +62,7 @@ struct AddressView_Previews: PreviewProvider {
 
 struct AddressView_PreviewContainer : View {
     var body: some View {
-        AddressView()
+        DashboardView()
     }
 }
 #endif
