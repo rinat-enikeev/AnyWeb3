@@ -10,7 +10,7 @@ import SwiftUI
 
 struct DashboardView: View {
     @State var isNetworksPresented = false
-    @State var isKeystoresPresented = false
+    @State var isAccountsPresented = false
     
     var body: some View {
         VStack {
@@ -21,13 +21,13 @@ struct DashboardView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button("Account") {
-                    isKeystoresPresented = true
+                    isAccountsPresented = true
                 }
-                .sheet(isPresented: $isKeystoresPresented) {
+                .sheet(isPresented: $isAccountsPresented) {
                     NavigationStack {
                         AccountsView()
                         Button("Close") {
-                            isKeystoresPresented = false
+                            isAccountsPresented = false
                         }
                         .padding()
                     }
