@@ -5,6 +5,7 @@
 //  Created by Rinat Enikeev on 03.12.2022.
 //
 
+import BigInt
 import Foundation
 
 struct Network: Codable, Hashable, Identifiable {
@@ -12,7 +13,7 @@ struct Network: Codable, Hashable, Identifiable {
     var name: String
     var decimals: Int
     var rpcUrl: URL
-    var chainId: Int
+    var chainId: BigUInt
 }
 
 extension Network {

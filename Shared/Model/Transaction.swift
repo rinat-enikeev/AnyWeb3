@@ -14,6 +14,13 @@ struct Transaction: Hashable {
     var value: Value?
     var gasLimit: Value?
     var gasPrice: Value?
+
+    var nonce: BigUInt = 0
+    var chainId: BigUInt = 0
+    var data: Data = Data()
+    var v: BigUInt = 1
+    var r: BigUInt = 0
+    var s: BigUInt = 0
 }
 
 extension Transaction {

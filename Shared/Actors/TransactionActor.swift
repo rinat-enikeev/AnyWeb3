@@ -26,17 +26,61 @@ final actor TransactionActor {
     }
 
     func resolveTransaction(_ transaction: Transaction) async throws -> Transaction {
-        var codable: CodableTransaction = .emptyTransaction
-        codable.from = transaction.from?.address
-        codable.to = transaction.to?.address ?? .zero
-        codable.value = transaction.value?.value ?? 0
+        var codable = CodableTransaction(from: transaction)
         try await policy.resolveAll(for: &codable, with: .auto)
-        return Transaction(
-            from: transaction.from,
-            to: transaction.to,
-            value: transaction.value,
-            gasLimit: Value(codable.gasLimit),
-            gasPrice: codable.gasPrice.map(Value.init)
+        return Transaction(from: codable)
+    }
+    
+    func signTransaction(_ transaction: Transaction, address: Address, keystore: Keystore) throws -> Transaction {
+        var codable = CodableTransaction(from: transaction)
+        try Web3Signer.signTX(
+            transaction: &codable,
+            keystore: keystore.web3,
+            account: address.address,
+            password: ""
         )
+        return Transaction(from: codable)
+    }
+    
+    func sendTransaction(_ transaction: Transaction) async throws {
+        let result = try await web3.eth.send(CodableTransaction(from: transaction))
+        print(result)
+    }
+}
+
+private extension Transaction {
+    init(from codable: CodableTransaction) {
+        self.init(
+            from: codable.from.map(Address.init),
+            to: Address(address: codable.to),
+            value: Value(codable.value),
+            gasLimit: Value(codable.gasLimit),
+            gasPrice: codable.gasPrice.map(Value.init),
+            nonce: codable.nonce,
+            chainId: codable.chainID ?? 0,
+            data: codable.data,
+            v: codable.v,
+            r: codable.r,
+            s: codable.s
+        )
+    }
+}
+
+private extension CodableTransaction {
+    init(from domain: Transaction) {
+        self.init(
+            type: .legacy,
+            to: domain.to?.address ?? .zero,
+            nonce: domain.nonce,
+            chainID: domain.chainId,
+            value: domain.value?.value ?? 0,
+            data: domain.data,
+            gasLimit: domain.gasLimit?.value ?? 0,
+            gasPrice: domain.gasPrice?.value,
+            v: domain.v,
+            r: domain.r,
+            s: domain.s
+        )
+        self.from = domain.from?.address
     }
 }

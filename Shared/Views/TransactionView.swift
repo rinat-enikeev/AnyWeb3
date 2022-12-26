@@ -5,6 +5,7 @@
 //  Created by Rinat Enikeev on 25.12.2022.
 //
 
+import BigInt
 import Factory
 import Combine
 import SwiftUI
@@ -43,6 +44,26 @@ struct TransactionView: View {
                 }
             }
             .padding()
+            Button("Sign") {
+                signTransaction()
+            }
+            .buttonStyle(.bordered)
+            HStack {
+                Text("V:")
+                Text(model.transaction.v.description)
+            }
+            HStack {
+                Text("R:")
+                Text(model.transaction.r.description)
+            }
+            HStack {
+                Text("S:")
+                Text(model.transaction.s.description)
+            }
+            Button("Send") {
+                sendTransaction()
+            }
+            .buttonStyle(.bordered)
         }
         .onChange(of: model.transaction) { _ in
             restartPolling()
@@ -52,6 +73,26 @@ struct TransactionView: View {
         }
         .task {
             restartPolling()
+        }
+    }
+    
+    private func sendTransaction() {
+        Task {
+            do {
+                try await model.sendTransaction()
+            } catch {
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    private func signTransaction() {
+        Task {
+            do {
+                try await model.signTransaction()
+            } catch {
+                print(error.localizedDescription)
+            }
         }
     }
     
@@ -66,6 +107,9 @@ final class TransactionModel: ObservableObject {
     
     @Injected(Container.settingsRepository)
     private var settingsRepository
+    
+    @Injected(Container.accountsRepository)
+    private var accountsRepository
 
     @Published var transaction = Transaction()
     @Published var network: Network?
@@ -77,7 +121,28 @@ final class TransactionModel: ObservableObject {
         userRepository.addressPublisher.sink { [weak self] from in
             self?.transaction.from = from
         }.store(in: &cancellables)
+        settingsRepository.networkPublisher.sink { [weak self] network in
+            self?.transaction.chainId = network?.chainId ?? 0
+        }.store(in: &cancellables)
         settingsRepository.networkPublisher.assign(to: &$network)
+    }
+    
+    func signTransaction() async throws {
+        guard let address = userRepository.address else { return }
+        guard let account = userRepository.account else { return }
+        guard let network else { return }
+        let keystore = try await accountsRepository.obtainKeystore(for: account)
+        let transactionActor = TransactionActor(network: network)
+        let transaction = try await transactionActor.signTransaction(transaction, address: address, keystore: keystore)
+        await MainActor.run {
+            self.transaction = transaction
+        }
+    }
+    
+    func sendTransaction() async throws {
+        guard let network else { return }
+        let transactionActor = TransactionActor(network: network)
+        try await transactionActor.sendTransaction(transaction)
     }
     
     func restartPolling() {
