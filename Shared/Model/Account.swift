@@ -4,7 +4,7 @@
 //
 //  Created by Rinat Enikeev on 04.12.2022.
 //
-import Core
+
 import Foundation
 
 struct Account: Codable, Hashable, Identifiable {

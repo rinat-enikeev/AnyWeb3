@@ -6,7 +6,6 @@
 //
 
 import BigInt
-import Core
 import Combine
 import Foundation
 import web3swift
