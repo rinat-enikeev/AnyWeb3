@@ -10,8 +10,8 @@ settings:
 
 packages:
   web3swift:
-    url: https://github.com/rinat-enikeev/web3swift
-    branch: rinat
+    url: https://github.com/web3swift-team/web3swift
+    from: 3.1.2
   KeychainAccess:
     url: https://github.com/kishikawakatsumi/KeychainAccess
     from: 4.2.2
